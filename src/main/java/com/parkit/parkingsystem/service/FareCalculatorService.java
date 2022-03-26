@@ -10,14 +10,9 @@ public class FareCalculatorService {
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
 
-        double inHour = ticket.getInTime().getHours();
-        double outHour = ticket.getOutTime().getHours();
-
-        long inHourtest = ticket.getInTime().getTime();
-        long outHourtest = ticket.getOutTime().getTime();
-
-        //TODO: Some tests are failing here. Need to check if this logic is correct
-        double duration = (outHourtest - inHourtest) / 360000;
+        double inHour = ticket.getInTime().getTime();
+        double outHour = ticket.getOutTime().getTime();
+        double duration = (outHour - inHour) / (60 * 60 * 1000);
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
