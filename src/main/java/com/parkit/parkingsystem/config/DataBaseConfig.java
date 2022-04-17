@@ -13,7 +13,8 @@ public class DataBaseConfig {
         logger.info("Create DB connection");
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/prod","root","mysqlmaxime");
+                "jdbc:mysql://localhost:3306/prod?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC","root","mysqlmaxime");
+
     }
 
     public void closeConnection(Connection con){
@@ -49,3 +50,7 @@ public class DataBaseConfig {
         }
     }
 }
+/**
+ * jdbc:mysql://localhost/db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+ * "jdbc:mysql://localhost:3306/prod","root","mysqlmaxime");
+ */

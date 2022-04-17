@@ -1,10 +1,12 @@
 package com.parkit.parkingsystem;
 
+import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.service.FareCalculatorService;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,25 +15,28 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Date;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ParkingServiceTest {
+
+public class ParkingServiceTest<Static> {
 
     private static ParkingService parkingService;
 
     @Mock
-    private static InputReaderUtil inputReaderUtil;
+    static InputReaderUtil inputReaderUtil;
     @Mock
     private static ParkingSpotDAO parkingSpotDAO;
     @Mock
     private static TicketDAO ticketDAO;
+    @Mock
+    private static Ticket ticket;
+
 
     @BeforeEach
-    private void setUpPerTest() {
+     void setUpPerTest() {
         try {
             when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
@@ -48,7 +53,7 @@ public class ParkingServiceTest {
             parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         } catch (Exception e) {
             e.printStackTrace();
-            throw  new RuntimeException("Failed to set up test mock objects");
+            throw new RuntimeException("Failed to set up test mock objects");
         }
     }
 
@@ -59,3 +64,4 @@ public class ParkingServiceTest {
     }
 
 }
+
