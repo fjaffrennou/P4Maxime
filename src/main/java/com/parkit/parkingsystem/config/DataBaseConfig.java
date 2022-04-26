@@ -50,7 +50,3 @@ public class DataBaseConfig {
         }
     }
 }
-/**
- * jdbc:mysql://localhost/db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
- * "jdbc:mysql://localhost:3306/prod","root","mysqlmaxime");
- */

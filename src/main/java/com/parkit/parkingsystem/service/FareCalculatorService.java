@@ -1,11 +1,13 @@
 package com.parkit.parkingsystem.service;
 
+import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
+import static com.parkit.parkingsystem.util.InputReaderUtil.readVehicleRegistrationNumber;
 
 public class FareCalculatorService {
 
-    public static void calculateFare(Ticket ticket){
+    public static void calculateFare(Ticket ticket) throws Exception {
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) )
             throw new IllegalArgumentException("Out time provided is incorrect:" + ticket.getOutTime().toString());
 
@@ -23,15 +25,31 @@ public class FareCalculatorService {
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
-                ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+                ticket.setPrice((duration * Fare.CAR_RATE_PER_HOUR)-checkLicencePlateNumberForFivePercentageDiscount());
                 break;
             }
             case BIKE: {
-                ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
+                ticket.setPrice((duration * Fare.BIKE_RATE_PER_HOUR)-checkLicencePlateNumberForFivePercentageDiscount());
                 break;
             }
             default: throw new IllegalArgumentException("Unkown Parking Type");
         }
     }
 
+    public static double checkLicencePlateNumberForFivePercentageDiscount() throws Exception {
+
+        Ticket ticket= new Ticket();
+        readVehicleRegistrationNumber();
+
+        String listOfLicencePlateNumber = DBConstants.CHECK_TICKET;
+        double rateOfDiscount;
+
+        if ((listOfLicencePlateNumber).equals(readVehicleRegistrationNumber())) {
+            System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+            rateOfDiscount = 0.05;
+        } else {
+            rateOfDiscount = 0.00;
+        }
+        return rateOfDiscount * ticket.getPrice();
+    }
 }

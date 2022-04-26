@@ -22,15 +22,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 public class FareCalculatorServiceTest {
 
-    private static FareCalculatorService fareCalculatorService;
     private Ticket ticket;
 
     @Mock
     InputReaderUtil inputReaderUtil;
 
     @BeforeAll
-    private static void setUp() {
-        fareCalculatorService = new FareCalculatorService();
+    private static void setUp(){
+        FareCalculatorService fareCalculatorService = new FareCalculatorService();
     }
 
     @BeforeEach private void setUpPerTest() {
@@ -39,7 +38,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareCar() {
+    public void calculateFareCar() throws Exception {
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
         Date outTime = new Date();
@@ -53,7 +52,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareBike() {
+    public void calculateFareBike() throws Exception {
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
         Date outTime = new Date();
@@ -93,7 +92,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareBikeWithLessThanOneHourParkingTime() {
+    public void calculateFareBikeWithLessThanOneHourParkingTime() throws Exception {
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis() - (45 * 60 * 1000));//45 minutes parking time should give 3/4th parking fare
         Date outTime = new Date();
@@ -107,7 +106,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareCarWithLessThanOneHourParkingTime() {
+    public void calculateFareCarWithLessThanOneHourParkingTime() throws Exception {
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis() - (45 * 60 * 1000));//45 minutes parking time should give 3/4th parking fare
         Date outTime = new Date();
@@ -121,7 +120,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareCarWithMoreThanADayParkingTime() {
+    public void calculateFareCarWithMoreThanADayParkingTime() throws Exception {
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis() - (24 * 60 * 60 * 1000));//24 hours parking time should give 24 * parking fare per hour
         Date outTime = new Date();
@@ -135,7 +134,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareCarWithLessThanThirtyMinutesParkingTime() {
+    public void calculateFareCarWithLessThanThirtyMinutesParkingTime() throws Exception {
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis() - (29 * 60 * 1000));
         Date outTime = new Date();
@@ -148,36 +147,36 @@ public class FareCalculatorServiceTest {
         assertEquals((0 * Fare.CAR_RATE_PER_HOUR), ticket.getPrice());
     }
 
-    @Test
-    public void checkLicencePlateNumberForFivePercentageDiscount() {
+   @Test
+   public void checkLicencePlateNumberForFivePercentageDiscount() {
 
-        try {
-        Date inTime = new Date();
-        inTime.setTime(System.currentTimeMillis() - (45* 60 * 1000));
-        Date outTime = new Date();
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+       try {
+       Date inTime = new Date();
+       inTime.setTime(System.currentTimeMillis() - (45* 60 * 1000));
+       Date outTime = new Date();
+       ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 
-        ticket.setInTime(inTime);
-        ticket.setOutTime(outTime);
-        ticket.setParkingSpot(parkingSpot);
-        FareCalculatorService.calculateFare(ticket);
+       ticket.setInTime(inTime);
+       ticket.setOutTime(outTime);
+       ticket.setParkingSpot(parkingSpot);
+       FareCalculatorService.calculateFare(ticket);
 
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-        String LicensePlateNumberAlreadyRegisted = "ABCDEF";
-        double rateOfDiscount;
+       when(InputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+       String LicensePlateNumberAlreadyRegisted = "ABCDEF";
+       double rateOfDiscount;
 
-        if (LicensePlateNumberAlreadyRegisted.equals(inputReaderUtil.readVehicleRegistrationNumber())) {
-            System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
-            rateOfDiscount = 0.05;
-        } else {
-            rateOfDiscount = 1.00;
-        }
-        double newPrice = rateOfDiscount * ticket.getPrice();
-        assertEquals( ((0.75*Fare.CAR_RATE_PER_HOUR)-newPrice), ticket.getPrice());
-    }
-        catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to set up test mock objects");
-        }
-    }
+       if (LicensePlateNumberAlreadyRegisted.equals(InputReaderUtil.readVehicleRegistrationNumber())) {
+           System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+           rateOfDiscount = 0.05;
+       } else {
+           rateOfDiscount = 0.0;
+       }
+       double newPrice = rateOfDiscount * ticket.getPrice();
+       assertEquals( ((0.75*Fare.CAR_RATE_PER_HOUR)-newPrice), ticket.getPrice());
+   }
+       catch (Exception e) {
+           e.printStackTrace();
+           throw new RuntimeException("Failed to set up test mock objects");
+       }
+   }
 }

@@ -16,7 +16,6 @@ public class App {
         File file = new File("/Users/maxime/IdeaProjects/parkingsystem/src/main/resources/log4j2.xml");
 // this will force a reconfiguration
         context.setConfigLocation(file.toURI());
-
         logger.info("Initializing Parking System");
         InteractiveShell.loadInterface();
     }
