@@ -160,6 +160,7 @@ public class FareCalculatorServiceTest {
        ticket.setOutTime(outTime);
        ticket.setParkingSpot(parkingSpot);
        FareCalculatorService.calculateFare(ticket);
+       InputReaderUtil.readVehicleRegistrationNumber();
 
        when(InputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
        String LicensePlateNumberAlreadyRegisted = "ABCDEF";

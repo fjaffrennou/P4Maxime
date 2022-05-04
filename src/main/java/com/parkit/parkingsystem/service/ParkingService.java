@@ -10,12 +10,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Date;
+import java.util.List;
+
+import static com.parkit.parkingsystem.util.InputReaderUtil.readVehicleRegistrationNumber;
 
 public class ParkingService {
 
     private static final Logger logger = LogManager.getLogger("ParkingService");
-
- //   private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
 
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
@@ -29,9 +30,17 @@ public class ParkingService {
 
     public void processIncomingVehicle() {
         try{
+
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
+
                 String vehicleRegNumber = getVehicleRegNumber();
+
+                ticketDAO.listOfLicencePlateNumber();
+                if (checkLicencePlateNumber()){
+                    System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+                }
+
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
@@ -98,6 +107,7 @@ public class ParkingService {
     }
 
     public void processExitingVehicle() {
+
         try{
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
@@ -117,4 +127,22 @@ public class ParkingService {
             logger.error("Unable to process exiting vehicle",e);
         }
     }
+
+    public static boolean checkLicencePlateNumber() throws Exception {
+
+        List<String> listForCheckingLicense= TicketDAO.listOfLicencePlateNumber();
+
+        boolean resultOfComparison=false;
+        for (String stringForChecking : listForCheckingLicense) {
+
+            if ((stringForChecking).equals(readVehicleRegistrationNumber())) {
+                resultOfComparison=true;
+
+            } else {
+                resultOfComparison= false;
+            }
+        }
+        return resultOfComparison;
+    }
+
 }

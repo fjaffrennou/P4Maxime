@@ -12,12 +12,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TicketDAO {
 
     private static final Logger logger = LogManager.getLogger("TicketDAO");
 
-    public DataBaseConfig dataBaseConfig = new DataBaseConfig();
+    public static DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
     public boolean saveTicket(Ticket ticket){
         Connection con = null;
@@ -85,5 +87,29 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return false;
+    }
+
+    public static List listOfLicencePlateNumber(){
+
+        List<String> ResultOfQueryInDB =new ArrayList<>();
+        Connection con = null;
+        try {
+
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.CHECK_TICKET);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ResultOfQueryInDB.add(rs.getString(1));
+            }
+
+        }catch (Exception ex){
+            logger.error("Error fetching next available slot",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+        }
+
+        return ResultOfQueryInDB;
+
     }
 }

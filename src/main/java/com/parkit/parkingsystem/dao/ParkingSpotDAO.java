@@ -12,8 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class ParkingSpotDAO {
-    private static final Logger logger = LogManager.getLogger("ParkingSpotDAO");
 
+    private static final Logger logger = LogManager.getLogger("ParkingSpotDAO");
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
     public int getNextAvailableSlot(ParkingType parkingType){
@@ -55,5 +55,6 @@ public class ParkingSpotDAO {
             dataBaseConfig.closeConnection(con);
         }
     }
+
 
 }
