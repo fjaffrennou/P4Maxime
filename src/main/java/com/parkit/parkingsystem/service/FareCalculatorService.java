@@ -10,7 +10,6 @@ import static com.parkit.parkingsystem.service.ParkingService.checkLicencePlateN
 public class FareCalculatorService {
 
     private static final Logger logger = LogManager.getLogger("FareCalculatorService");
-    Ticket ticket= new Ticket();
 
     public static void calculateFare(Ticket ticket) throws Exception {
 
@@ -27,14 +26,15 @@ public class FareCalculatorService {
         } else {
             duration = subtractedTime;
         }
-
+        fivePercentageDiscount();
+//ticket.getPrice()
         switch (ticket.getParkingSpot().getParkingType()) {
             case CAR: {
-                ticket.setPrice((duration * Fare.CAR_RATE_PER_HOUR) - (fivePercentageDiscount() * ticket.getPrice()));
+                ticket.setPrice((duration * Fare.CAR_RATE_PER_HOUR) - ( fivePercentageDiscount() * (duration * Fare.CAR_RATE_PER_HOUR) ));
                 break;
             }
             case BIKE: {
-                ticket.setPrice((duration * Fare.BIKE_RATE_PER_HOUR) - (fivePercentageDiscount() * ticket.getPrice() ));
+                ticket.setPrice((duration * Fare.BIKE_RATE_PER_HOUR) - ( fivePercentageDiscount() * (duration * Fare.CAR_RATE_PER_HOUR) ));
                 break;
             }
             default:
@@ -42,15 +42,15 @@ public class FareCalculatorService {
         }
     }
 
-    public static double fivePercentageDiscount() throws Exception {
+   public static double fivePercentageDiscount() {
 
-        double rateOfDiscount;
+       double rateOfDiscount;
 
-        if (checkLicencePlateNumber()) {
-            rateOfDiscount = 0.05;
-        } else {
-            rateOfDiscount = 0.00;
-        }
-        return rateOfDiscount;
-    }
+       if (ParkingService.checkLicencePlateNumber==true) {
+           rateOfDiscount = 0.05;
+       } else {
+           rateOfDiscount = 0.00;
+       }
+       return rateOfDiscount;
+   }
 }

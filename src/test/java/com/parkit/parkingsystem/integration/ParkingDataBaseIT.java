@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static com.parkit.parkingsystem.service.ParkingService.checkLicencePlateNumber;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,6 +41,7 @@ public class ParkingDataBaseIT {
     private void setUpPerTest() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        when(checkLicencePlateNumber).thenReturn(false);
         dataBasePrepareService.clearDataBaseEntries();
     }
 

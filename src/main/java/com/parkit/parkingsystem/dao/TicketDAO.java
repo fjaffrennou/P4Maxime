@@ -102,13 +102,11 @@ public class TicketDAO {
             while (rs.next()) {
                 ResultOfQueryInDB.add(rs.getString(1));
             }
-
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
         }
-
         return ResultOfQueryInDB;
 
     }

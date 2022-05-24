@@ -17,6 +17,7 @@ import static com.parkit.parkingsystem.util.InputReaderUtil.readVehicleRegistrat
 public class ParkingService {
 
     private static final Logger logger = LogManager.getLogger("ParkingService");
+    public static boolean checkLicencePlateNumber;
 
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
@@ -36,10 +37,11 @@ public class ParkingService {
 
                 String vehicleRegNumber = getVehicleRegNumber();
 
-                ticketDAO.listOfLicencePlateNumber();
-                if (checkLicencePlateNumber()){
-                    System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
-                }
+               ticketDAO.listOfLicencePlateNumber();
+               checkLicencePlateNumber(vehicleRegNumber);
+               if (checkLicencePlateNumber(vehicleRegNumber)){
+                   System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+               }
 
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
@@ -63,7 +65,7 @@ public class ParkingService {
         }
     }
 
-    private String getVehicleRegNumber() throws Exception {
+    private static String getVehicleRegNumber() throws Exception {
         System.out.println("Please type the vehicle registration number and press enter key");
         return InputReaderUtil.readVehicleRegistrationNumber();
     }
@@ -128,16 +130,16 @@ public class ParkingService {
         }
     }
 
-    public static boolean checkLicencePlateNumber() throws Exception {
+    public static boolean checkLicencePlateNumber(String vehicleRegNumber){
 
         List<String> listForCheckingLicense= TicketDAO.listOfLicencePlateNumber();
 
-        boolean resultOfComparison=false;
+        boolean resultOfComparison = false;
         for (String stringForChecking : listForCheckingLicense) {
 
-            if ((stringForChecking).equals(readVehicleRegistrationNumber())) {
+            if ((stringForChecking).equals(vehicleRegNumber)) {
                 resultOfComparison=true;
-
+                continue;
             } else {
                 resultOfComparison= false;
             }
